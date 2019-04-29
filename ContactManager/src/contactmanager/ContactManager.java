@@ -28,6 +28,9 @@ public class ContactManager extends javax.swing.JFrame {
         setDBSystemDir();
         createDBTable();
         getResultSet();
+        displayResults();
+        pnlInsert.setVisible(false);
+        pack();
     }
 
     private void setDBSystemDir() {
@@ -62,6 +65,25 @@ public class ContactManager extends javax.swing.JFrame {
             rs.first();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    private void displayResults() {
+        try {
+            txtName.setText(rs.getString("name"));
+            txtEmail.setText(rs.getString("email"));
+            txtPhone.setText(rs.getString("phone"));
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 20000) {
+                //Error code 20000: Invalid Cursor State = no records in DB!
+                JOptionPane.showMessageDialog(this, "Click New to get started!");
+                //If user deletes last record...
+                txtName.setText("");
+                txtEmail.setText("");
+                txtPhone.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
         }
     }
 
