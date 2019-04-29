@@ -174,6 +174,11 @@ public class ContactManager extends javax.swing.JFrame {
         getContentPane().add(pnlInput, java.awt.BorderLayout.PAGE_START);
 
         btnInsert.setText("Insert");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
         pnlInsert.add(btnInsert);
 
         btnCancel.setText("Cancel");
@@ -251,6 +256,14 @@ public class ContactManager extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // When update button is clicked:
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // When delete button is clicked:
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        // When insert button is clicked:
         try {
             rs.updateString("name", txtName.getText());
             rs.updateString("email", txtEmail.getText());
@@ -267,11 +280,7 @@ public class ContactManager extends javax.swing.JFrame {
             pack();
             displayResults();
         }
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // When delete button is clicked:
-    }//GEN-LAST:event_btnDeleteActionPerformed
+    }//GEN-LAST:event_btnInsertActionPerformed
 
     /**
      * @param args the command line arguments
