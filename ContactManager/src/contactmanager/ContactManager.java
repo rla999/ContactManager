@@ -5,17 +5,36 @@
  */
 package contactmanager;
 
+import java.sql.*;
+import org.apache.derby.jdbc.*;
+import javax.swing.*;
+
 /**
  *
  * @author Ryan
  */
 public class ContactManager extends javax.swing.JFrame {
 
+    private Connection con;
+    private ResultSet rs;
+    private Statement stmt;
+    private final String dbURI = "jdbc:derby:contact;create=true";
+
     /**
      * Creates new form ContactManager
      */
     public ContactManager() {
         initComponents();
+        setDBSystemDir();
+    }
+
+    private void setDBSystemDir() {
+        //Decide on the database system directory: <userhome>/contact/
+        String userHomeDir = System.getProperty("user.home", ".");
+        String systemDir = userHomeDir + "/contact";
+
+        //Set the database system directory
+        System.setProperty("derby.system.home", systemDir);
     }
 
     /**
@@ -180,6 +199,7 @@ public class ContactManager extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new ContactManager().setVisible(true);
             }
