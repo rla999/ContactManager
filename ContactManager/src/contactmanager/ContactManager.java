@@ -27,6 +27,7 @@ public class ContactManager extends javax.swing.JFrame {
         initComponents();
         setDBSystemDir();
         createDBTable();
+        getResultSet();
     }
 
     private void setDBSystemDir() {
@@ -52,9 +53,16 @@ public class ContactManager extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void getResultSet() {
-        
+        try {
+            stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery("select * from contact");
+            //Result is scrollable and updateable.
+            rs.first();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 
     /**
