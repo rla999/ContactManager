@@ -26,6 +26,7 @@ public class ContactManager extends javax.swing.JFrame {
     public ContactManager() {
         initComponents();
         setDBSystemDir();
+        createDBTable();
     }
 
     private void setDBSystemDir() {
@@ -35,6 +36,25 @@ public class ContactManager extends javax.swing.JFrame {
 
         //Set the database system directory
         System.setProperty("derby.system.home", systemDir);
+    }
+
+    private void createDBTable() {
+        try {
+            String sql = "create table contact (name varchar(30), email varchar(30), phone varchar(30))";
+            DriverManager.registerDriver(new EmbeddedDriver());
+            con = DriverManager.getConnection(dbURI);
+            stmt = con.createStatement();
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 30000) {
+                //Error code 30000: Table exists = this is not an error!
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }
+    }
+    
+    private void getResultSet() {
+        
     }
 
     /**
