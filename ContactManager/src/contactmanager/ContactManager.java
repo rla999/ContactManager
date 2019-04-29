@@ -203,14 +203,29 @@ public class ContactManager extends javax.swing.JFrame {
 
         btnNew.setText("New");
         btnNew.setToolTipText("Create a new  record");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
         pnlControls.add(btnNew);
 
         btnUpdate.setText("Update");
         btnUpdate.setToolTipText("Update the record");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
         pnlControls.add(btnUpdate);
 
         btnDelete.setText("Delete");
         btnDelete.setToolTipText("Delete the record");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
         pnlControls.add(btnDelete);
 
         pnlButtons.add(pnlControls);
@@ -219,6 +234,28 @@ public class ContactManager extends javax.swing.JFrame {
 
         setBounds(0, 0, 416, 339);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        //When new button is clicked:
+        pnlButtons.setVisible(false);
+        pnlInsert.setVisible(true);
+        pack();
+
+        try {
+            rs.moveToInsertRow();
+            displayResults();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // When update button is clicked:
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // When delete button is clicked:
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
