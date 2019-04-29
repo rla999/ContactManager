@@ -251,6 +251,22 @@ public class ContactManager extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // When update button is clicked:
+        try {
+            rs.updateString("name", txtName.getText());
+            rs.updateString("email", txtEmail.getText());
+            rs.updateString("phone", txtPhone.getText());
+            rs.insertRow();
+            //refresh the ResultSet
+            rs = stmt.executeQuery("select * from contact");
+            rs.last();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        } finally {
+            pnlInsert.setVisible(false);
+            pnlButtons.setVisible(true);
+            pack();
+            displayResults();
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
