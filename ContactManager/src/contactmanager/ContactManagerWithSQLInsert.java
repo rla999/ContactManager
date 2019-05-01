@@ -1,36 +1,31 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package contactmanager;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import org.apache.derby.jdbc.*;
 
 /**
  *
  * @author tduffy
  */
-public class ContactManager extends javax.swing.JFrame {
+public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
     private Connection con;
     private ResultSet rs;
     private Statement stmt;
-    private String dbURI = "jdbc:derby:contact;create=true";
+    private final String dbURI = "jdbc:derby:contact;create=true";
 
     /**
      * Creates new form ContactManager
      */
-    public ContactManager() {
+    public ContactManagerWithSQLInsert() {
         initComponents();
         setDBSystemDir();
         createDBTable();
         getResultSet();
         displayResults();
-        pnlInsert.setVisible(false);
-        pack();
     }
     
     private void setDBSystemDir() {
@@ -46,7 +41,7 @@ public class ContactManager extends javax.swing.JFrame {
         try {
             DriverManager.registerDriver(new EmbeddedDriver());
             con = DriverManager.getConnection(dbURI);
-            String sql = "create table contact (name varchar(30), email varchar(30) not null, phone varchar(30), primary key (email))";
+            String sql = "create table contact (name varchar(30), email varchar(30), phone varchar(30))";
             stmt = con.createStatement();
             stmt.execute(sql);
         } catch (SQLException ex) {
@@ -60,7 +55,7 @@ public class ContactManager extends javax.swing.JFrame {
     private void getResultSet(){
         try {
             stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery("select contact.* from contact order by name");
+            rs = stmt.executeQuery("select * from contact");
             //ResultSet is scrollable and updatable
             rs.first();
         } catch (SQLException ex) {
@@ -76,7 +71,7 @@ public class ContactManager extends javax.swing.JFrame {
         }catch(SQLException ex){
             if(ex.getErrorCode()==20000){
                 //Invalid Cursor State - no records in ResultSet
-                JOptionPane.showMessageDialog(this,"Click New Contact to get started");
+                JOptionPane.showMessageDialog(this,"Click New Record to get started");
                 //In case the only record was deleted...
                 txtName.setText("");
                 txtEmail.setText("");
@@ -96,101 +91,28 @@ public class ContactManager extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlInsert = new javax.swing.JPanel();
-        btnInsert = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
-        pnlInput = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtPhone = new javax.swing.JTextField();
-        pnlButtons = new javax.swing.JPanel();
-        pnlNav = new javax.swing.JPanel();
         btnFirst = new javax.swing.JButton();
         btnPrevious = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         btnLast = new javax.swing.JButton();
-        pnlControls = new javax.swing.JPanel();
         btnNew = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Contact Manager");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
-
-        btnInsert.setText("Insert Contact");
-        btnInsert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertActionPerformed(evt);
-            }
-        });
-        pnlInsert.add(btnInsert);
-
-        btnCancel.setText("Cancel");
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
-        pnlInsert.add(btnCancel);
-
-        getContentPane().add(pnlInsert, java.awt.BorderLayout.SOUTH);
 
         jLabel1.setText("Name");
 
-        jLabel2.setText("EMail");
+        jLabel2.setText("E-Mail");
 
         jLabel3.setText("Phone");
-
-        javax.swing.GroupLayout pnlInputLayout = new javax.swing.GroupLayout(pnlInput);
-        pnlInput.setLayout(pnlInputLayout);
-        pnlInputLayout.setHorizontalGroup(
-            pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInputLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlInputLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtName))
-                    .addGroup(pnlInputLayout.createSequentialGroup()
-                        .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-                            .addComponent(txtPhone))))
-                .addContainerGap())
-        );
-        pnlInputLayout.setVerticalGroup(
-            pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInputLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(pnlInput, java.awt.BorderLayout.PAGE_START);
-
-        pnlButtons.setLayout(new java.awt.GridLayout(2, 1));
 
         btnFirst.setText("<<");
         btnFirst.addActionListener(new java.awt.event.ActionListener() {
@@ -198,7 +120,6 @@ public class ContactManager extends javax.swing.JFrame {
                 btnFirstActionPerformed(evt);
             }
         });
-        pnlNav.add(btnFirst);
 
         btnPrevious.setText("<");
         btnPrevious.addActionListener(new java.awt.event.ActionListener() {
@@ -206,7 +127,6 @@ public class ContactManager extends javax.swing.JFrame {
                 btnPreviousActionPerformed(evt);
             }
         });
-        pnlNav.add(btnPrevious);
 
         btnNext.setText(">");
         btnNext.addActionListener(new java.awt.event.ActionListener() {
@@ -214,7 +134,6 @@ public class ContactManager extends javax.swing.JFrame {
                 btnNextActionPerformed(evt);
             }
         });
-        pnlNav.add(btnNext);
 
         btnLast.setText(">>");
         btnLast.addActionListener(new java.awt.event.ActionListener() {
@@ -222,39 +141,99 @@ public class ContactManager extends javax.swing.JFrame {
                 btnLastActionPerformed(evt);
             }
         });
-        pnlNav.add(btnLast);
 
-        pnlButtons.add(pnlNav);
-
-        btnNew.setText("New Contact");
+        btnNew.setText("New Record");
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
             }
         });
-        pnlControls.add(btnNew);
 
-        btnUpdate.setText("Update Info");
+        btnUpdate.setText("Save Changes");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
-        pnlControls.add(btnUpdate);
 
-        btnDelete.setText("Delete Contact");
+        btnDelete.setText("Delete record");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);
             }
         });
-        pnlControls.add(btnDelete);
 
-        pnlButtons.add(pnlControls);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .add(6, 6, 6)
+                .add(jLabel1)
+                .add(18, 18, 18)
+                .add(txtName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 334, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+            .add(layout.createSequentialGroup()
+                .add(7, 7, 7)
+                .add(jLabel2)
+                .add(12, 12, 12)
+                .add(txtEmail, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 334, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+            .add(layout.createSequentialGroup()
+                .add(6, 6, 6)
+                .add(jLabel3)
+                .add(16, 16, 16)
+                .add(txtPhone, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 334, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+            .add(layout.createSequentialGroup()
+                .add(70, 70, 70)
+                .add(btnFirst)
+                .add(5, 5, 5)
+                .add(btnPrevious)
+                .add(5, 5, 5)
+                .add(btnNext)
+                .add(5, 5, 5)
+                .add(btnLast))
+            .add(layout.createSequentialGroup()
+                .add(10, 10, 10)
+                .add(btnNew)
+                .add(2, 2, 2)
+                .add(btnUpdate)
+                .add(0, 0, 0)
+                .add(btnDelete))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .add(20, 20, 20)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(6, 6, 6)
+                        .add(jLabel1))
+                    .add(txtName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(12, 12, 12)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(6, 6, 6)
+                        .add(jLabel2))
+                    .add(txtEmail, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(12, 12, 12)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(6, 6, 6)
+                        .add(jLabel3))
+                    .add(txtPhone, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(22, 22, 22)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(btnFirst)
+                    .add(btnPrevious)
+                    .add(btnNext)
+                    .add(btnLast))
+                .add(31, 31, 31)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(btnNew)
+                    .add(btnUpdate)
+                    .add(btnDelete)))
+        );
 
-        getContentPane().add(pnlButtons, java.awt.BorderLayout.CENTER);
-
-        setSize(new java.awt.Dimension(400, 263));
+        setSize(new java.awt.Dimension(400, 285));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -325,6 +304,7 @@ public class ContactManager extends javax.swing.JFrame {
                 rs = stmt.executeQuery("select * from contact");
                 rs.absolute(currentRow);
                 displayResults();
+                
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(this,ex.getMessage());
@@ -332,59 +312,21 @@ public class ContactManager extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        pnlButtons.setVisible(false);
-        pnlInsert.setVisible(true);
-        pack();
+        
         try {
-            rs.moveToInsertRow();
+            String name = JOptionPane.showInputDialog("Name: ");
+            String email = JOptionPane.showInputDialog("E-Mail: ");
+            String phone = JOptionPane.showInputDialog("Phone: ");
+            stmt.executeUpdate("insert into contact values('" + name + "','" + email + "','" + phone + "')");
+            rs = stmt.executeQuery("select * from contact");
+            rs.last();
             displayResults();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,ex.getMessage());
         }
+        
+        
     }//GEN-LAST:event_btnNewActionPerformed
-
-    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-        try{
-            rs.updateString("name", txtName.getText());
-            rs.updateString("email", txtEmail.getText());
-            rs.updateString("phone", txtPhone.getText());
-            rs.insertRow();
-            //refresh the ResultSet
-            rs = stmt.executeQuery("select * from contact");
-            rs.last();
-        }catch(Exception ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
-        }finally{
-            pnlInsert.setVisible(false);
-            pnlButtons.setVisible(true);
-            pack();
-            displayResults();
-        }
-    }//GEN-LAST:event_btnInsertActionPerformed
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        try{
-            rs.moveToCurrentRow();
-        }catch(Exception ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
-        }finally{
-            pnlInsert.setVisible(false);
-            pnlButtons.setVisible(true);
-            pack();
-            displayResults();
-        }
-    }//GEN-LAST:event_btnCancelActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try{
-            rs = null;
-            stmt = null;
-            con.close();
-            con = null;
-        }catch(Exception ex){
-            
-        }
-    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -403,29 +345,29 @@ public class ContactManager extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ContactManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ContactManagerWithSQLInsert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ContactManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ContactManagerWithSQLInsert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ContactManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ContactManagerWithSQLInsert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ContactManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ContactManagerWithSQLInsert.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ContactManager().setVisible(true);
+                new ContactManagerWithSQLInsert().setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnFirst;
-    private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnLast;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnNext;
@@ -434,11 +376,6 @@ public class ContactManager extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel pnlButtons;
-    private javax.swing.JPanel pnlControls;
-    private javax.swing.JPanel pnlInput;
-    private javax.swing.JPanel pnlInsert;
-    private javax.swing.JPanel pnlNav;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPhone;
