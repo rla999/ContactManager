@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package contactmanager;
+
 import java.sql.*;
 import javax.swing.JOptionPane;
 import org.apache.derby.jdbc.*;
@@ -12,6 +13,7 @@ import org.apache.derby.jdbc.*;
  * @author tduffy
  */
 public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
+
     private Connection con;
     private ResultSet rs;
     private Statement stmt;
@@ -27,7 +29,7 @@ public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
         getResultSet();
         displayResults();
     }
-    
+
     private void setDBSystemDir() {
         // Decide on the db system directory: <userhome>/contact/
         String userHomeDir = System.getProperty("user.home", ".");
@@ -36,8 +38,8 @@ public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
         // Set the db system directory.
         System.setProperty("derby.system.home", systemDir);
     }
-    
-    private void createDBTable(){
+
+    private void createDBTable() {
         try {
             DriverManager.registerDriver(new EmbeddedDriver());
             con = DriverManager.getConnection(dbURI);
@@ -45,40 +47,40 @@ public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
             stmt = con.createStatement();
             stmt.execute(sql);
         } catch (SQLException ex) {
-            if(ex.getErrorCode()!=30000){
+            if (ex.getErrorCode() != 30000) {
                 //Error Code 30000: Table already exists - not an error!
-                JOptionPane.showMessageDialog(this,ex.getMessage());
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
         }
     }
-    
-    private void getResultSet(){
+
+    private void getResultSet() {
         try {
-            stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             rs = stmt.executeQuery("select * from contact");
             //ResultSet is scrollable and updatable
             rs.first();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
-    
-    private void displayResults(){
-        try{
+
+    private void displayResults() {
+        try {
             txtName.setText(rs.getString("name"));
             txtEmail.setText(rs.getString("email"));
             txtPhone.setText(rs.getString("phone"));
-        }catch(SQLException ex){
-            if(ex.getErrorCode()==20000){
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == 20000) {
                 //Invalid Cursor State - no records in ResultSet
-                JOptionPane.showMessageDialog(this,"Click New Record to get started");
+                JOptionPane.showMessageDialog(this, "Click New Record to get started");
                 //In case the only record was deleted...
                 txtName.setText("");
                 txtEmail.setText("");
                 txtPhone.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-            else
-                JOptionPane.showMessageDialog(this,ex.getMessage());
         }
     }
 
@@ -238,81 +240,82 @@ public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
-        try{
+        try {
             rs.first();
             displayResults();
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnFirstActionPerformed
 
     private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
-        try{
-            if(rs.previous()){
+        try {
+            if (rs.previous()) {
                 displayResults();
-            }else{
+            } else {
                 rs.first();
                 displayResults();
             }
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnPreviousActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
-        try{
-            if(rs.next()){
+        try {
+            if (rs.next()) {
                 displayResults();
-            }else{
+            } else {
                 rs.last();
                 displayResults();
             }
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
-        try{
+        try {
             rs.last();
             displayResults();
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnLastActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        try{
+        try {
             rs.updateString("name", txtName.getText());
             rs.updateString("email", txtEmail.getText());
             rs.updateString("phone", txtPhone.getText());
             rs.updateRow();
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        try{
-            int dialogResult = JOptionPane.showConfirmDialog(this, "Delete Record?", "Warning",JOptionPane.YES_NO_OPTION);
-            if(dialogResult==0){
+        try {
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Delete Record?", "Warning", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == 0) {
                 int currentRow = rs.getRow() - 1;
-                if(currentRow == 0)
+                if (currentRow == 0) {
                     currentRow = 1;
+                }
                 rs.deleteRow();
                 rs.close();
                 rs = stmt.executeQuery("select * from contact");
                 rs.absolute(currentRow);
                 displayResults();
-                
+
             }
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        
+
         try {
             String name = JOptionPane.showInputDialog("Name: ");
             String email = JOptionPane.showInputDialog("E-Mail: ");
@@ -322,10 +325,10 @@ public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
             rs.last();
             displayResults();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        
-        
+
+
     }//GEN-LAST:event_btnNewActionPerformed
 
     /**
