@@ -6,8 +6,6 @@
 package contactmanager;
 
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import org.apache.derby.jdbc.*;
 
@@ -20,7 +18,7 @@ public class ContactManager extends javax.swing.JFrame {
     private Connection con;
     private ResultSet rs;
     private Statement stmt;
-    private String dbURI = "jdbc:derby:contact;create=true";
+    private final String dbURI = "jdbc:derby:contact;create=true";
 
     /**
      * Creates new form ContactManager
@@ -62,7 +60,7 @@ public class ContactManager extends javax.swing.JFrame {
     private void getResultSet() {
         try {
             stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery("select contact.* from contact order by name");
+            rs = stmt.executeQuery("select contact.* from contact");
             //ResultSet is scrollable and updatable
             rs.first();
         } catch (SQLException ex) {
@@ -355,7 +353,7 @@ public class ContactManager extends javax.swing.JFrame {
             //refresh the ResultSet
             rs = stmt.executeQuery("select * from contact");
             rs.last();
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } finally {
             pnlInsert.setVisible(false);
@@ -368,7 +366,7 @@ public class ContactManager extends javax.swing.JFrame {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         try {
             rs.moveToCurrentRow();
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } finally {
             pnlInsert.setVisible(false);
@@ -384,7 +382,7 @@ public class ContactManager extends javax.swing.JFrame {
             stmt = null;
             con.close();
             con = null;
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
 
         }
     }//GEN-LAST:event_formWindowClosing
@@ -417,10 +415,8 @@ public class ContactManager extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ContactManager().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ContactManager().setVisible(true);
         });
     }
 

@@ -177,8 +177,8 @@ public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .add(7, 7, 7)
                 .add(jLabel2)
-                .add(12, 12, 12)
-                .add(txtEmail, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 334, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(18, 18, 18)
+                .add(txtEmail, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 328, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
             .add(layout.createSequentialGroup()
                 .add(6, 6, 6)
                 .add(jLabel3)
@@ -362,10 +362,8 @@ public class ContactManagerWithSQLInsert extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ContactManagerWithSQLInsert().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ContactManagerWithSQLInsert().setVisible(true);
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
